@@ -11,10 +11,8 @@ public:
 
     Buffer(const string& nomeArquivo);
 
-    Registro lerDelimitado();
     Registro lerDescritor();
 
-    void escreverDelimitado(const Registro& reg);
     void escreverDescritor(const Registro& reg);
 };
 

@@ -32,10 +32,8 @@ bool read_field(stringstream& ss, string& field) {
 }
 
 
-
 int main() {
     string arquivoCSV = "booksDataset.csv";
-    string arquivoResposta = "DadosResposta.txt";
     string arquivoBinario = "dados_binario.dat";
     vector<Registro> registros;
 
@@ -67,21 +65,12 @@ int main() {
         
         Registro reg(ID, title, authors, publishYear, category);
         registros.push_back(reg);
-        cout << reg.ID << endl;
+        //cout << reg.ID << endl;
     }
     arquivoEntrada.close();
 
     // 2. Salva os registros no formato delimitado
-    ofstream arquivoSaidaDelimitado(arquivoResposta);
-    if (!arquivoSaidaDelimitado) {
-        cerr << "Erro ao abrir o arquivo para escrita no formato delimitado.\n";
-        return 1;
-    }
-
-    for (const Registro& reg : registros) {
-        arquivoSaidaDelimitado << reg.packDelimited();  // Escreve cada registro no formato delimitado
-    }
-    arquivoSaidaDelimitado.close();
+    
 
     // 3. Salva os registros no formato binário com descritor de tamanho
     ofstream arquivoSaidaBinario(arquivoBinario, ios::binary);
