@@ -31,6 +31,19 @@ void Registro::unpackDelimited(const string& buffer) {
     getline(stream, category, '\n');
 }
 
+void Registro::unpackDelimitedbinary(const string& buffer) {
+    stringstream stream(buffer);
+    string ID_str;
+    getline(stream, ID_str, '|');
+    ID = stoi(ID_str);
+    getline(stream, title, '|');
+    getline(stream, authors, '|');
+    string publishYear_str;
+    getline(stream, publishYear_str, '|');
+    publishYear = stoi(publishYear_str);
+    getline(stream, category, '\n');
+}
+
 // Desempacota os dados de um registro no formato com descritor de tamanho.
 void Registro::unpackDescritor(const string& buffer) {
     int tamanho;

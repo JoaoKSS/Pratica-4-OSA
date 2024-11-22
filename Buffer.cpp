@@ -1,4 +1,5 @@
 #include "Buffer.h"
+#include "Index.h"
 #include <stdexcept>
 #include <fstream>
 #include <iostream>
@@ -10,7 +11,10 @@ void Buffer::escreverDescritor(const Registro& reg) {
     if (!arquivoSaida)
         throw runtime_error("Erro ao abrir o arquivo para escrita.");
     string buffer = reg.packDescritor();
+    streampos pos = arquivoSaida.tellp();
     arquivoSaida.write(buffer.data(), buffer.size());
+    Index i;
+    i.escreveIndex(reg.ID, pos);
     arquivoSaida.close();
 }
 

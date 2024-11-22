@@ -1,5 +1,6 @@
 #include "Buffer.h"
 #include "Registro.h"
+#include "Index.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -35,6 +36,7 @@ bool read_field(stringstream& ss, string& field) {
 int main() {
     string arquivoCSV = "booksDataset.csv";
     string arquivoBinario = "dados_binario.dat";
+    string arquivoIndex = "index.txt";
     vector<Registro> registros;
 
     // 1. Lê os registros do arquivo CSV e os armazena em um vetor
@@ -68,11 +70,9 @@ int main() {
         //cout << reg.ID << endl;
     }
     arquivoEntrada.close();
-
-    // 2. Salva os registros no formato delimitado
     
 
-    // 3. Salva os registros no formato binário com descritor de tamanho
+    // 2. Salva os registros no formato binário com descritor de tamanho
     ofstream arquivoSaidaBinario(arquivoBinario, ios::binary);
     if (!arquivoSaidaBinario) {
         cerr << "Erro ao abrir o arquivo para escrita no formato binário.\n";

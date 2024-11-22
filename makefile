@@ -14,7 +14,7 @@
 # definindo as variáveis do projeto (MAIN é o nome do arquivo principal, que contem a função main, sem a extensao)
 MAIN 	:= main
 # objetos a serem gerados na compilação
-OBJECTS := $(MAIN).o Registro.o Buffer.o 
+OBJECTS := $(MAIN).o Registro.o Buffer.o Index.o
 # (para C, pode-se usar o padrão ISO 2011 (c11) ou 2018 (c18), dependendo do seu compilador...
 # usar -std=c98 no lugar do c++11, c++17, c++20, etc.. 
 
@@ -46,7 +46,7 @@ main.exe: $(OBJECTS)
 	$(CC) $(FLAGS) $(OBJECTS) -o $(OUTPUTMAIN) $(MATH)
 	
 # gerando o arquivo objeto da função principal... 
-main.o: $(MAIN).cpp  Registro.h Buffer.h
+main.o: $(MAIN).cpp  Registro.h Buffer.h Index.h
 	$(CC) $(FLAGS) -c $(MAIN).cpp
 	
 # gerando o arquivo objeto Registro.o
@@ -54,9 +54,11 @@ Registro.o: Registro.cpp Registro.h
 	$(CC) $(FLAGS) -c Registro.cpp
 
 # gerando o arquivo objeto Buffer.o
-Buffer.o: Buffer.cpp Buffer.h Registro.h 
+Buffer.o: Buffer.cpp Buffer.h Registro.h Index.h
 	$(CC) $(FLAGS) -c Buffer.cpp
 
+Index.o: Index.cpp Index.h
+	$(CC) $(FLAGS) -c Index.cpp
 
 clean:
 	rm -rf $(OBJECTS)

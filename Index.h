@@ -1,5 +1,5 @@
-#ifndef LIVRO_H
-#define LIVRO_H
+#ifndef Index_H
+#define Index_H
 #include<string>
 #include<cstddef>
 #include<stdint.h>
@@ -7,19 +7,22 @@
 #include <sstream>
 using namespace std;
 
-class Livro{
+class Index{
     public:
         int id;
-        string title;
-        int anoPublicacao;
-        string categoria;
-
-        Livro(int id,const string &title,int anoPublicacao, const string &categoria);
+        streampos endereco;
+        string nomeArquivo;
+        
+        Index(const string& nomeArquivo); 
+        Index(int id, streampos endereco);
+        Index();
 
         string packDelimited() const;
         //string pack() const;
 
         void unpackDelimited(const string& buffer);
         //void unpackDescritor(const string& buffer);
+
+        void escreveIndex(int id, streampos endereco);
 };
 #endif
