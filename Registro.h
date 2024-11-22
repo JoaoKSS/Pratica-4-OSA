@@ -21,8 +21,10 @@ public:
     Registro();
     Registro(int ID, const string& title, const string& authors, int publishYear, const string& category);
     
+    string packDelimited() const;
     string packDescritor() const;
 
+    void unpackDelimited(const string& buffer);
     void unpackDescritor(const string& buffer);
 };
 
