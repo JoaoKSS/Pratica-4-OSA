@@ -46,7 +46,7 @@ main.exe: $(OBJECTS)
 	$(CC) $(FLAGS) $(OBJECTS) -o $(OUTPUTMAIN) $(MATH)
 	
 # gerando o arquivo objeto da função principal... 
-main.o: $(MAIN).cpp  Registro.h Buffer.h Index.h
+main.o: $(MAIN).cpp  Registro.h Buffer.h Index.h Arvore.h
 	$(CC) $(FLAGS) -c $(MAIN).cpp
 	
 # gerando o arquivo objeto Registro.o
@@ -54,15 +54,20 @@ Registro.o: Registro.cpp Registro.h
 	$(CC) $(FLAGS) -c Registro.cpp
 
 # gerando o arquivo objeto Buffer.o
-Buffer.o: Buffer.cpp Buffer.h Registro.h Index.h
+Buffer.o: Buffer.cpp Buffer.h Registro.h Index.h Arvore.h
 	$(CC) $(FLAGS) -c Buffer.cpp
 
 Index.o: Index.cpp Index.h
 	$(CC) $(FLAGS) -c Index.cpp
 
 clean:
-	rm -rf $(OBJECTS)
+ifeq ($(OS), Windows_NT)
+	del /Q *.o
+	del /Q $(OUTPUTMAIN)
+else
+	rm -rf *.o
 	rm -rf $(OUTPUTMAIN)
+endif
 	@echo Cleanup complete!!!
 
 run: all

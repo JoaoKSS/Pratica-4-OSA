@@ -5,6 +5,7 @@
 #include <string>
 #include "Pilha.h"
 #include "Fila.h"
+#include "Index.h"
 using namespace std;
 
 
@@ -40,6 +41,7 @@ class ArvoreBinaria
 
         Nodo<TIPO>* Inserir(TIPO valor, Nodo<TIPO>* n);
         bool Pesquisar(TIPO valor, Nodo<TIPO>* n);
+        int Busca(int valor, Nodo<TIPO>* n);
 
         Nodo<TIPO>* Remover(TIPO valor, Nodo<TIPO>* n);
         Nodo<TIPO>* RemoverNodo(Nodo<TIPO>* n);
@@ -56,6 +58,7 @@ class ArvoreBinaria
         ArvoreBinaria(){ raiz = NULL;   }
         void Inserir(TIPO valor);
         bool Pesquisar(TIPO valor);
+        int Busca(int valor);
 
         void Remover(TIPO valor);
         ~ArvoreBinaria(){Destruir(raiz);}
@@ -89,7 +92,8 @@ void ArvoreBinaria<TIPO>::Print(Nodo<TIPO> *n)
     if ( n!= NULL )
     {
         Print(n->esq);
-        cout<<n->item<<" ";
+        cout<<n->item.id<<" ";
+        // cout<<n->item.endereco<<" ";
         Print(n->dir);
     }
 }
@@ -117,7 +121,6 @@ Nodo<TIPO>* ArvoreBinaria<TIPO>::Inserir(TIPO valor, Nodo<TIPO>* n)
 }
 
 
-
 template <class TIPO>
 bool ArvoreBinaria<TIPO>::Pesquisar(TIPO valor)
 {
@@ -137,6 +140,24 @@ bool ArvoreBinaria<TIPO>::Pesquisar(TIPO valor, Nodo<TIPO>* n)
 }
 
 template <class TIPO>
+int ArvoreBinaria<TIPO>::Busca(int valor)
+{
+    return Busca(valor, raiz);
+}
+template <class TIPO>
+int ArvoreBinaria<TIPO>::Busca(int valor, Nodo<TIPO>* n)
+{
+    if ( n == NULL )
+        return 0;
+    else if ( n->item.id == valor ){
+        return n->item.endereco;
+    }else if ( valor > n->item.id )
+        return Busca(valor, n->dir);
+    else
+        return Busca(valor, n->esq);
+}
+
+template <class TIPO>
 void ArvoreBinaria<TIPO>::Remover(TIPO valor)
 {
     raiz = Remover(valor, raiz);
@@ -149,7 +170,7 @@ Nodo<TIPO>* ArvoreBinaria<TIPO>::Remover(TIPO valor, Nodo<TIPO>* n)
     {
         if ( valor == n->item )
         {
-            tmp = n; /// guardar o endereÁo do nÛ a ser removido
+            tmp = n; /// guardar o endere√ßo do n√≥ a ser removido
             n = RemoverNodo(n);
         }
         else if ( valor > n->item )
@@ -164,15 +185,15 @@ Nodo<TIPO>* ArvoreBinaria<TIPO>::Remover(TIPO valor, Nodo<TIPO>* n)
 template <class TIPO>
 Nodo<TIPO>* ArvoreBinaria<TIPO>::RemoverNodo(Nodo<TIPO>* n)
 {
-    if ( n->esq == NULL ) /// verifica se o no em quest„o n„o possui sub-·rvore esquerda
+    if ( n->esq == NULL ) /// verifica se o no em quest√£o n√£o possui sub-√°rvore esquerda
         return n->dir;
-    else if ( n->dir == NULL ) /// verifica se o no em quest„o n„o possui sub-·rvore direita
+    else if ( n->dir == NULL ) /// verifica se o no em quest√£o n√£o possui sub-√°rvore direita
         return n->esq;
     else
         return RemoverMax(n);
 }
 
-/// remoÁ„o feita promovendo o MAIOR nÛ da sub·rvore ESQUERDA
+/// remo√ß√£o feita promovendo o MAIOR n√≥ da sub√°rvore ESQUERDA
 template <class TIPO>
 Nodo<TIPO>* ArvoreBinaria<TIPO>::RemoverMax(Nodo<TIPO>* n)
 {
@@ -301,25 +322,25 @@ void ArvoreBinaria<TIPO>::Destruir(Nodo<TIPO>* n)
     }
 }
 
-/** impress„o IN ORDER sem recurs„o
+/** impress√£o IN ORDER sem recurs√£o
 template<class T>
 void BST<T>::iterativeInorder() {
   Stack<BSTNode<T>*> travStack;
   BSTNode<T> *p = root;
   while (p != 0) {
      while (p != 0) {      // empilhar filho da direita (se houver)
-       if (p->right)       // e o prÛprio nÛ quando for
+       if (p->right)       // e o pr√≥prio n√≥ quando for
            travStack.push(p->right); // para a direita;
        travStack.push(p);
        p = p->left;
       }
-     p = travStack.pop();        // pop em nÛ sem filho esquerdo
+     p = travStack.pop();        // pop em n√≥ sem filho esquerdo
      while (!travStack.empty() && p->right == 0) {
-                                 // visita-lo e a todos os nÛs
+                                 // visita-lo e a todos os n√≥s
          visit(p);               // sem filho direito;
          p = travStack.pop();
        }
-       visit(p);                 // visitar tambÈm o primeiro nÛ com
+       visit(p);                 // visitar tamb√©m o primeiro n√≥ com
        if (!travStack.empty())   // um filho direito (se houver);
              p = travStack.pop();
         else p = 0;

@@ -14,15 +14,17 @@ class Index{
         string nomeArquivo;
         
         Index(const string& nomeArquivo); 
-        Index(int id, streampos endereco);
+        Index(int id, streampos endereco,  const string& nomeArquivo);
         Index();
 
         string packDelimited() const;
-        //string pack() const;
 
         void unpackDelimited(const string& buffer);
-        //void unpackDescritor(const string& buffer);
+        void escreveIndex();
 
-        void escreveIndex(int id, streampos endereco);
+
+        bool operator>(const Index& other) const;
+        bool operator<(const Index& other) const;
+        bool operator==(const Index& other) const;
 };
 #endif

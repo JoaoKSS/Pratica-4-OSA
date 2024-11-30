@@ -9,22 +9,35 @@ using namespace std;
 Index::Index(const string& nomeArquivo) 
     : nomeArquivo(nomeArquivo) {}
 
-Index::Index(int id, streampos endereco)
-    : id(id), endereco(endereco) {}
+Index::Index(int id, streampos endereco,  const string& nomeArquivo)
+    : id(id), endereco(endereco), nomeArquivo(nomeArquivo) {}
 
 Index::Index() {}
 
-void Index::escreveIndex(int id, streampos posicao) {
+void Index::escreveIndex() {
     // Abrir o arquivo para adicionar no final (modo texto)
-    cout << "brasil e de Heuller" << endl;
-    ofstream arquivoIndex(nomeArquivo, ios::app);
-    if (!arquivoIndex) {
+    ofstream arquivoIndex(nomeArquivo, ios:: app);
+    if (!arquivoIndex.is_open()) {
+        cerr << "Falha ao abrir o arquivo de índice: " << nomeArquivo << endl;
         throw runtime_error("Erro ao abrir o arquivo de índice para escrita.");
     }
 
     // Criar o registro no formato: "ID|POSIÇÃO\n"
-    arquivoIndex << id << "|" << posicao << "\n";
-
-    // Fechar o arquivo
-    arquivoIndex.close();
+    arquivoIndex << id << "|" << endereco << "\n";
 }
+
+// Operador de comparação '>'
+bool Index::operator>(const Index& other) const {
+    return id > other.id; 
+}
+
+// Operador de comparação '<'
+bool Index::operator<(const Index& other) const {
+    return id < other.id; 
+}
+
+// Operador de comparação '=='
+bool Index::operator==(const Index& other) const {
+    return id == other.id;
+}
+

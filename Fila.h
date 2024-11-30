@@ -1,9 +1,9 @@
 /*****************************************************
- * IMPLEMENTAÇÃO DO TAD - Alocação dinâmica
+ * IMPLEMENTAï¿½ï¿½O DO TAD - Alocaï¿½ï¿½o dinï¿½mica
  *****************************************************
- * TAD FILA IMPLEMENTADO UTILIZANDO ENCADEAMENTO DE NÓS
+ * TAD FILA IMPLEMENTADO UTILIZANDO ENCADEAMENTO DE Nï¿½S
   *****************************************************/
-// diretiva de pré-compilação para evitar a redefinição do tipo
+// diretiva de prï¿½-compilaï¿½ï¿½o para evitar a redefiniï¿½ï¿½o do tipo
 #ifndef FILA_H
 #define FILA_H
 
@@ -12,7 +12,7 @@
 #include <cassert>
 using namespace std;
 
-// implementação de uma classe para representação dos nós da FILA
+// implementaï¿½ï¿½o de uma classe para representaï¿½ï¿½o dos nï¿½s da FILA
 template <class T>
 class NodeFila
 {
@@ -25,19 +25,19 @@ class NodeFila
         NodeFila(T it){item =it; prox =NULL;}
 };
 
-// Declaração da classe FILA, seus atributos e métodos.
+// Declaraï¿½ï¿½o da classe FILA, seus atributos e mï¿½todos.
 template <class TIPO>
 class Fila
 {
     private:
-        NodeFila<TIPO>* head; // apontador para o início da fila
+        NodeFila<TIPO>* head; // apontador para o inï¿½cio da fila
         NodeFila<TIPO>* tail; // apontador para o final da fila
     public:
         Fila(); // construtor do TAD fila
-        Fila(const Fila<TIPO>&); // construtor de cópia
-        void Enfileirar(TIPO); // método para enfileirar dados no final da fila
-        TIPO  Desenfileirar(); // método para desenfileirar dados do inicio da fila
-        bool Vazia(); // método para verificar se um fila está vazia
+        Fila(const Fila<TIPO>&); // construtor de cï¿½pia
+        void Enfileirar(TIPO); // mï¿½todo para enfileirar dados no final da fila
+        TIPO  Desenfileirar(); // mï¿½todo para desenfileirar dados do inicio da fila
+        bool Vazia(); // mï¿½todo para verificar se um fila estï¿½ vazia
         ~Fila(); // destrutor
         void Imprimir();
         Fila<TIPO>& operator=(const Fila<TIPO>&);
@@ -51,7 +51,7 @@ Fila<T>::Fila()
     tail = NULL;
 }
 
-// construtor de cópia
+// construtor de cï¿½pia
 template <class T>
 Fila<T>::Fila(const Fila<T>& f)
 {
@@ -65,37 +65,37 @@ Fila<T>::Fila(const Fila<T>& f)
 }
 
 
-// método para enfileirar dados no final da fila
+// mï¿½todo para enfileirar dados no final da fila
 template <class T>
 void Fila<T>::Enfileirar(T item)
 {
-    // criar um novo nó contendo o item e apontando o prox para NULL (veja construtor do Node)
+    // criar um novo nï¿½ contendo o item e apontando o prox para NULL (veja construtor do Node)
     NodeFila<T>* aux = new NodeFila<T>(item);
 
-    // verifica se a Fila está vazia (head==NULL) e,
-    // caso afirmativo, aponta head para o novo nó (aux)...
+    // verifica se a Fila estï¿½ vazia (head==NULL) e,
+    // caso afirmativo, aponta head para o novo nï¿½ (aux)...
     if( head == NULL )
         head = aux;
-    else // caso contrário, o prox do final da fila aponta para aux.
+    else // caso contrï¿½rio, o prox do final da fila aponta para aux.
         tail->prox = aux;
     // faz aux ser o final da fila (tail aponta para aux)
     tail = aux;
 }
 
-// método para desenfileirar dados do inicio da fila
+// mï¿½todo para desenfileirar dados do inicio da fila
 template <class T>
 T  Fila<T>::Desenfileirar()
 {
     assert ( !Vazia() );
 
-    T aux = head->item; // recupera o elemento que está no início da fila
-    NodeFila<T>* tmp = head; // armazena o endereço de head em tmp
-    head = head->prox; // atualiza head para o próximo da fila
-    delete tmp;   // remove da fila o nó que estava no início da fila
+    T aux = head->item; // recupera o elemento que estï¿½ no inï¿½cio da fila
+    NodeFila<T>* tmp = head; // armazena o endereï¿½o de head em tmp
+    head = head->prox; // atualiza head para o prï¿½ximo da fila
+    delete tmp;   // remove da fila o nï¿½ que estava no inï¿½cio da fila
     return aux;   // retorna o resultado
 }
 
-// método para verificar se um fila está vazia
+// mï¿½todo para verificar se um fila estï¿½ vazia
 template <class T>
 bool Fila<T>::Vazia()
 {

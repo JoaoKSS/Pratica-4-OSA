@@ -1,6 +1,7 @@
 #include "Buffer.h"
 #include "Registro.h"
 #include "Index.h"
+#include "Arvore.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -32,11 +33,10 @@ bool read_field(stringstream& ss, string& field) {
     return true;
 }
 
-
 int main() {
     string arquivoCSV = "booksDataset.csv";
     string arquivoBinario = "dados_binario.dat";
-    string arquivoIndex = "index.txt";
+    string arquivoIndex = "Index.txt";
     vector<Registro> registros;
 
     // 1. Lê os registros do arquivo CSV e os armazena em um vetor
@@ -57,7 +57,7 @@ int main() {
             cerr << "Erro ao ler título" << endl;
             continue;
         }
-        // getline(ss, title, ';');
+        //getline(ss, title, ';');
         getline(ss, authors, ';');
         getline(ss, publishYear_str, ';');
         getline(ss, category);
@@ -67,24 +67,44 @@ int main() {
         
         Registro reg(ID, title, authors, publishYear, category);
         registros.push_back(reg);
-        //cout << reg.ID << endl;
     }
     arquivoEntrada.close();
     
 
     // 2. Salva os registros no formato binário com descritor de tamanho
-    ofstream arquivoSaidaBinario(arquivoBinario, ios::binary);
-    if (!arquivoSaidaBinario) {
-        cerr << "Erro ao abrir o arquivo para escrita no formato binário.\n";
-        return 1;
+    Buffer buffer(arquivoBinario, arquivoIndex);
+    buffer.escreverDescritorVetor(registros);
+
+    //3. Querys
+    try {
+        //Encontrando registros por id
+        buffer.buscarRegistro(103063);
+        buffer.buscarRegistro(35244);
+        buffer.buscarRegistro(5109);
+    } catch (const runtime_error& e) {
+        cerr << e.what() << endl;
     }
 
-    for (const Registro& reg : registros) {
-        string registroBinario = reg.packDescritor();
-        arquivoSaidaBinario.write(registroBinario.c_str(), registroBinario.size());
-    }
-    arquivoSaidaBinario.close();
+    //4. Adicionando novos registros
+    vector<Registro> novosRegistros = {
+        Registro(25303063, "The Great Gatsby", "F. Scott Fitzgerald", 1925, "Fiction"),
+        Registro(2325244, "The Catcher in the Rye", "J.D. Salinger", 1951, "Fiction"),
+        Registro(2345109, "To Kill a Mockingbird", "Harper Lee", 1960, "Fiction")
+    };
 
-    cout << "Leitura e gravação de registros concluída com sucesso!\n";
+    buffer.adicionarRegistros(novosRegistros);
+
+    try {
+        for(auto reg : novosRegistros) {
+            buffer.buscarRegistro(reg.ID);
+        }
+    } catch (const runtime_error& e) {
+        cerr << e.what() << endl;
+    }
+
+
+    cout << endl << "Leitura e gravação de registros concluída com sucesso!\n";
     return 0;
 }
+
+

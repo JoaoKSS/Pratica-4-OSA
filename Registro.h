@@ -26,7 +26,7 @@ public:
     string packDescritor() const;
 
     void unpackDelimited(const string& buffer);
-    void unpackDelimitedbinary(const string& buffer);
+    void unpackDelimitedBinary(const string& buffer);
     void unpackDescritor(const string& buffer);
 };
 
