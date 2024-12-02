@@ -7,104 +7,61 @@
 #include <vector>
 #include <sstream>
 
-// função que conta o número de aspas
-int count_quotes(const string& str) {
-    int count = 0;
-    for (char c : str) {
-        if (c == '"') {
-            count++;
-        }
-    }
-    return count;
-}
-
-// função leitura dos campos para garantir que a string title seja lida corretamente, mesmo quando ela contém aspas.
-bool read_field(stringstream& ss, string& field) {
-    getline(ss, field, ';');
-    
-    // Verifica se há aspas
-    while (count_quotes(field) % 2 != 0) {
-        string temp;
-        getline(ss, temp, ';');
-        field += ";" + temp;
-    }
-    
-    // Retorna verdadeiro se o campo foi lido com sucesso
-    return true;
-}
-
 int main() {
     string arquivoCSV = "booksDataset.csv";
-    string arquivoBinario = "dados_binario.dat";
+    string arquivoBinario = "dadosBinario.bin";
     string arquivoIndex = "Index.txt";
-    vector<Registro> registros;
 
-    // 1. Lê os registros do arquivo CSV e os armazena em um vetor
-    ifstream arquivoEntrada(arquivoCSV);
-    if (!arquivoEntrada) {
-        cerr << "Erro ao abrir o arquivo CSV para leitura.\n";
+    vector<Registro> Registros;
+
+    // ler arquivo CSV
+    if (!Registro::carregarDoCSV(arquivoCSV, Registros)) {
+        cerr << "Erro ao carregar registros do CSV." << endl;
         return 1;
     }
 
-    string linha;
-    getline(arquivoEntrada, linha);
-    while (getline(arquivoEntrada, linha)) {
-        stringstream ss(linha);
-        string ID_str, title, authors, publishYear_str, category;
-
-        getline(ss, ID_str, ';');
-        if (!read_field(ss, title)) {
-            cerr << "Erro ao ler título" << endl;
-            continue;
-        }
-        //getline(ss, title, ';');
-        getline(ss, authors, ';');
-        getline(ss, publishYear_str, ';');
-        getline(ss, category);
-
-        int ID = stoi(ID_str);
-        int publishYear = stoi(publishYear_str);
-        
-        Registro reg(ID, title, authors, publishYear, category);
-        registros.push_back(reg);
-    }
-    arquivoEntrada.close();
-    
-
-    // 2. Salva os registros no formato binário com descritor de tamanho
+    // Salva os registros no formato binário com descritor de tamanho
     Buffer buffer(arquivoBinario, arquivoIndex);
-    buffer.escreverDescritorVetor(registros);
+    buffer.escreverDescritor(Registros);
 
-    //3. Querys
+    // Busca Registros
     try {
         //Encontrando registros por id
-        buffer.buscarRegistro(103063);
-        buffer.buscarRegistro(35244);
-        buffer.buscarRegistro(5109);
+        cout << endl;
+        cout << "+----------------------------------------------------------------+" << endl;
+        cout << " Registros buscados e encontrados com sucesso e mostrados abaixo!" << endl;
+        cout << "+----------------------------------------------------------------+" << endl << endl;
+        buffer.buscarRegistro(105);
+        buffer.buscarRegistro(203);
+        buffer.buscarRegistro(102005);
     } catch (const runtime_error& e) {
         cerr << e.what() << endl;
     }
 
-    //4. Adicionando novos registros
-    vector<Registro> novosRegistros = {
-        Registro(25303063, "The Great Gatsby", "F. Scott Fitzgerald", 1925, "Fiction"),
-        Registro(2325244, "The Catcher in the Rye", "J.D. Salinger", 1951, "Fiction"),
-        Registro(2345109, "To Kill a Mockingbird", "Harper Lee", 1960, "Fiction")
-    };
-
-    buffer.adicionarRegistros(novosRegistros);
-
+    // Adiciona novos registros
     try {
+        vector<Registro> novosRegistros = {
+            Registro(123457, "Zen and the Art of Guitar", "Harper, James",2010, "Music , Instruction & Study , Techniques"),
+            Registro(123458, "Zero Hour: A Novel", "Smith, Caroline", 2018, "Fiction , Thrillers , Action & Adventure"),
+            Registro(123459, "Zodiac Signs: An Illustrated Guide", "Moore, Abigail", 2021, "Self-Help , Astrology , Illustrated")
+        };
+
+        buffer.adicionarRegistros(novosRegistros);
+        cout << endl << endl;
+        cout << "+-----------------------------------------------------------------+" << endl;
+        cout << " Registros novos foram adicionados com sucesso e mostrados abaixo!" << endl;
+        cout << "+-----------------------------------------------------------------+" << endl;
+        cout << endl;
+
+        // Busca registros novos inseridos
         for(auto reg : novosRegistros) {
             buffer.buscarRegistro(reg.ID);
         }
-    } catch (const runtime_error& e) {
-        cerr << e.what() << endl;
+
+    } catch (const std::exception& e) {
+        cerr << "Erro ao adicionar registros: " << e.what() << endl;
     }
 
-
-    cout << endl << "Leitura e gravação de registros concluída com sucesso!\n";
+    cout << endl << "Todas operações concluída com sucesso!\n";
     return 0;
 }
-
-

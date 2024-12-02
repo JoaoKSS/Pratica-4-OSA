@@ -122,6 +122,25 @@ Nodo<TIPO>* ArvoreBinaria<TIPO>::Inserir(TIPO valor, Nodo<TIPO>* n)
 
 
 template <class TIPO>
+int ArvoreBinaria<TIPO>::Busca(int valor)
+{
+    return Busca(valor, raiz);
+}
+template <class TIPO>
+int ArvoreBinaria<TIPO>::Busca(int valor, Nodo<TIPO>* n)
+{
+    if ( n == NULL )
+        return 0;
+    else if ( n->item.id == valor ){
+        return n->item.endereco;
+    }else if ( valor > n->item.id )
+        return Busca(valor, n->dir);
+    else
+        return Busca(valor, n->esq);
+}
+
+
+template <class TIPO>
 bool ArvoreBinaria<TIPO>::Pesquisar(TIPO valor)
 {
     return Pesquisar(valor, raiz);
@@ -139,23 +158,6 @@ bool ArvoreBinaria<TIPO>::Pesquisar(TIPO valor, Nodo<TIPO>* n)
         return Pesquisar(valor, n->esq);
 }
 
-template <class TIPO>
-int ArvoreBinaria<TIPO>::Busca(int valor)
-{
-    return Busca(valor, raiz);
-}
-template <class TIPO>
-int ArvoreBinaria<TIPO>::Busca(int valor, Nodo<TIPO>* n)
-{
-    if ( n == NULL )
-        return 0;
-    else if ( n->item.id == valor ){
-        return n->item.endereco;
-    }else if ( valor > n->item.id )
-        return Busca(valor, n->dir);
-    else
-        return Busca(valor, n->esq);
-}
 
 template <class TIPO>
 void ArvoreBinaria<TIPO>::Remover(TIPO valor)

@@ -4,6 +4,7 @@
 #include <sstream>
 #include <iostream>
 #include <cstring>
+#include <vector>
 using namespace std;
 
 class Registro {
@@ -20,12 +21,12 @@ public:
 
     Registro();
     Registro(int ID, const string& title, const string& authors, int publishYear, const string& category);
+
+    static bool carregarDoCSV(const string& arquivoCSV, vector<Registro>& registros);
     
-    string packDelimited() const;
     string packDelimitedbinary() const;
     string packDescritor() const;
 
-    void unpackDelimited(const string& buffer);
     void unpackDelimitedBinary(const string& buffer);
     void unpackDescritor(const string& buffer);
 };

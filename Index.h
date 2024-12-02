@@ -15,16 +15,6 @@ class Index{
         
         Index(const string& nomeArquivo); 
         Index(int id, streampos endereco,  const string& nomeArquivo);
-        Index();
-
-        string packDelimited() const;
-
-        void unpackDelimited(const string& buffer);
-        void escreveIndex();
-
-
-        bool operator>(const Index& other) const;
-        bool operator<(const Index& other) const;
-        bool operator==(const Index& other) const;
+        Index(); 
 };
 #endif

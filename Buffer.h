@@ -40,10 +40,9 @@ public:
 
     Registro lerDescritor();
 
-    void escreverDescritor(const Registro& reg);
-    void escreverDescritorVetor(const vector<Registro>& registros);
+    void escreverDescritor(const vector<Registro>& registros);
 
-    int buscarEnd(int id);
+    int buscarEndereco(int id);
     void buscarRegistro(int id);
     void adicionarRegistros(const vector<Registro>& registros);
 };

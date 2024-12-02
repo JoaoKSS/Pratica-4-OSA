@@ -9,5 +9,8 @@
         "string": "cpp",
         "xstring": "cpp",
         "cstring": "cpp"
-    }
+    },
+    "cSpell.ignoreWords": [
+        "Binario"
+    ]
 }

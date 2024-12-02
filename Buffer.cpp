@@ -8,41 +8,35 @@
 Buffer::Buffer(const string& nomeArquivo, const string& nomeArquivoIndex) 
     : nomeArquivo(nomeArquivo), nomeArquivoIndex(nomeArquivoIndex) {}
 
-void Buffer::escreverDescritorVetor(const vector<Registro>& registros) {
+void Buffer::escreverDescritor(const vector<Registro>& registros) {
     ofstream arquivoSaida(nomeArquivo, ios::trunc | ios::binary);
     if (!arquivoSaida)
         throw runtime_error("Erro ao abrir o arquivo para escrita.");
 
-    // Vetor de índices
+    // Vetor índices
     vector<Index> indices;
 
     for (const Registro& reg : registros) {
         // Empacota o registro
         string buffer = reg.packDescritor();
-
-        // Salva a posição antes de escrever o registro
+        // Salva a posição 
         streampos pos = arquivoSaida.tellp();
-
         // Escreve o registro no arquivo de dados
         arquivoSaida.write(buffer.data(), buffer.size());
-
         // Cria o objeto Index
         Index index(reg.ID, pos, nomeArquivoIndex);
-        
         Node n = {reg.ID, pos};
         arvoreIndices.Inserir(n);
-        
         // Adiciona o índice no vetor (para posterior escrita no arquivo)
         indices.push_back(index);
     }
+    // Mostra a arvore inserida
     // arvoreIndices.Print();
-  
     arquivoSaida.close();
     // Abre o arquivo de índice para escrita
     ofstream arquivoIndex(nomeArquivoIndex, ios::trunc);
     if (!arquivoIndex.is_open())
         throw runtime_error("Erro ao abrir o arquivo de índice.");
-
     // Escreve todos os índices no arquivo
     for (const Index& index : indices) {
         arquivoIndex << index.id << "|" << index.endereco << "\n";
@@ -71,15 +65,12 @@ Registro Buffer::lerDescritor() {
 }
 
 
-int Buffer::buscarEnd(int id) {
-    
-    // Pesquisa na árvore binária
-    int endereco = arvoreIndices.Busca(id);
-
-    // Verifica se o endereço foi encontrado
-    if (endereco != 0) {
-        cout << "Índice encontrado: ID = " << id << ", Endereço = " << endereco << endl;
-        return endereco;
+int Buffer::buscarEndereco(int id) {
+    // Busca na árvore 
+    int address = arvoreIndices.Busca(id);
+    if (address != 0) {
+        cout << "Índice encontrado: ID = " << id << ", Endereço = " << address << endl;
+        return address;
     } else {
         cout << "Índice com ID " << id << " não encontrado." << endl;
         throw runtime_error("Índice não encontrado.");
@@ -87,16 +78,15 @@ int Buffer::buscarEnd(int id) {
 }
 
 void Buffer::buscarRegistro(int id){
-    int encontrado = buscarEnd(id); // Procura o índice com ID = id
-
+    int encontra = buscarEndereco(id); // Procura o índice com ID 
     ifstream file(nomeArquivo, ios::binary);
-    file.seekg(static_cast<streampos>(encontrado));
+    file.seekg(static_cast<streampos>(encontra));
     string buffer;
-    char c;
-    // Ler até encontrar o delimitador final '\n'
-    while (file.get(c)) {
-        buffer += c;
-        if (c == '\n') {
+    char DelimitadorF;
+    // Encontrar o delimitador final '\n'
+    while (file.get(DelimitadorF)) {
+        buffer += DelimitadorF;
+        if (DelimitadorF == '\n') {
             break;
         }
     }
@@ -104,16 +94,16 @@ void Buffer::buscarRegistro(int id){
         cerr << "Erro: nenhum dado lido!" << endl;
         return;
     }
-    Registro registro;
-    registro.unpackDescritor(buffer);
+    Registro REG;
+    REG.unpackDescritor(buffer);
     // Exibir os dados desserializados
-    cout << "---------------------------------------------------" << endl;
-    cout << "ID: " << registro.ID << endl;
-    cout << "Title: " << registro.title << endl;
-    cout << "Authors: " << registro.authors << endl;
-    cout << "Publish Year: " << registro.publishYear << endl;
-    cout << "Category: " << registro.category << endl;
-    cout << "---------------------------------------------------"<< endl;
+    cout << "===================================================" << endl;
+    cout << "ID: " << REG.ID << endl;
+    cout << "Title: " << REG.title << endl;
+    cout << "Authors: " << REG.authors << endl;
+    cout << "Publish Year: " << REG.publishYear << endl;
+    cout << "Category: " << REG.category << endl;
+    cout << "===================================================" << endl;
     file.close();
 }
 
@@ -128,30 +118,22 @@ void Buffer::adicionarRegistros(const vector<Registro>& registros) {
     for (const Registro& reg : registros) {
         // Empacota o registro
         string buffer = reg.packDescritor();
-
-        // Salva a posição antes de escrever o registro
+        // Salva a posição 
         streampos pos = arquivoSaida.tellp();
-
         // Escreve o registro no arquivo de dados
         arquivoSaida.write(buffer.data(), buffer.size());
-
         // Cria o objeto Index
         Index index(reg.ID, pos, nomeArquivoIndex);
-
         Node n = {reg.ID, pos};
         arvoreIndices.Inserir(n);
-        
         // Adiciona o índice no vetor (para posterior escrita no arquivo)
         indices.push_back(index);
     }
-    // arvoreIndices.Print();
-  
     arquivoSaida.close();
-    // Abre o arquivo de índice para escrita
+    // escreve no arquivo de índice para escrita
     ofstream arquivoIndex(nomeArquivoIndex, ios::app);
     if (!arquivoIndex.is_open())
         throw runtime_error("Erro ao abrir o arquivo de índice.");
-
     // Escreve todos os índices no arquivo
     for (const Index& index : indices) {
         arquivoIndex << index.id << "|" << index.endereco << "\n";
